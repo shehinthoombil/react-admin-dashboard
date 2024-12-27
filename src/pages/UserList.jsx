@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { TableRow } from "../Components/userList/TableRow";
 import { SidebarItem } from "../Components/userList/SidebarItem";
 import { TableHeader } from "../Components/userList/TableHeader";
@@ -24,6 +24,21 @@ const sidebarItems = [
 ];
 
 function UserTable() {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        // Fetch user data from an API
+        const fetchUsers = async () => {
+          try {
+            const response = await fetch('/api/users');
+            const data = await response.json();
+            setUsers(data);
+          } catch (error) {
+            console.error("Error fetching users:", error);
+          }
+        };
+        fetchUsers();
+      }, []);
   return (
     <div className="flex overflow-hidden flex-wrap bg-stone-100">
       <div className="flex flex-col text-sm leading-none whitespace-nowrap text-stone-500">

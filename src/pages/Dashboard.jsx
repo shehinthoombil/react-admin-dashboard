@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { StatCard } from "../Components/Dashboard/StatCard";
 import { SidebarItem } from "../Components/Dashboard/SidebarItem";
 
@@ -49,6 +49,22 @@ const statsData = [
 ];
 
 function Dashboard() {
+    const [stats, setStats] = useState([]);
+
+    useEffect(() => {
+        // Fetch data from an API
+        const fetchStats = async () => {
+          try {
+            const response = await fetch('/api/dashboard-stats');
+            const data = await response.json();
+            setStats(data);
+          } catch (error) {
+            console.error("Error fetching stats:", error);
+          }
+        };
+        fetchStats();
+      }, []);
+      
   return (
     <div className="flex overflow-hidden flex-wrap bg-stone-100">
       <div className="flex flex-col text-sm leading-none whitespace-nowrap text-stone-500">

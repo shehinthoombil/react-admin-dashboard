@@ -1,7 +1,7 @@
 import * as React from "react";
-import { InputField } from "./InputField";
-import { Button } from "./Button";
-import { NotificationBanner } from "./NotificationBanner";
+import { FormInput } from "../Components/setNewPassword/FormInput";
+import { NotificationBanner } from "../Components/setNewPassword/NotificationBanner";
+import { Button } from "../Components/passswordReset/Button";
 
 function LoginForm() {
   const formFields = [
@@ -26,7 +26,7 @@ function LoginForm() {
         <form className="flex flex-col mt-11 w-full max-md:mt-10">
           <div className="flex flex-col w-full text-xs font-medium text-stone-900">
             {formFields.map((field) => (
-              <InputField
+              <FormInput
                 key={field.id}
                 label={field.label}
                 type={field.type}

@@ -1,23 +1,25 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
 import './index.css';
 import {LoginPage} from './pages/Login';
 import { PasswordResetPage } from './pages/PasswordResetPage';
 import Dashboard from './pages/Dashboard';
 import UserTable from './pages/UserList';
+import LoginForm from './pages/SetNewPassword';
 
 function App() {
 
   return (
-    <>
-      <LoginPage/>
-      <PasswordResetPage/>
-      <Dashboard/>
-      <UserTable/>
-      
-    </>
+    <Router>
+    <Routes>
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/password-reset" element={<PasswordResetPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/users" element={<UserTable />} />
+      <Route path="/set-new-password" element={<LoginForm />} />
+    </Routes>
+  </Router>
   )
 }
 
