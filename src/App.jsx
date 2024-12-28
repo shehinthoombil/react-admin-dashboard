@@ -7,10 +7,11 @@ import { PasswordResetPage } from './pages/PasswordResetPage';
 import Dashboard from './pages/Dashboard';
 import UserTable from './pages/UserList';
 import LoginForm from './pages/SetNewPassword';
-
+import { ToastContainer } from "react-toastify";
 function App() {
 
   return (
+    
     <Router>
     <Routes>
       <Route path="/" element={<LoginPage />} />
@@ -20,6 +21,7 @@ function App() {
       <Route path="/set-new-password" element={<LoginForm />} />
     </Routes>
   </Router>
+  
   )
 }
 
