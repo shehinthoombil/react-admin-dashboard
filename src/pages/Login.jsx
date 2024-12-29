@@ -9,6 +9,9 @@ export function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [accountError, setAccountError] = useState("");
+    const [loading, setLoading] = useState(false);
+
 
     const validateEmail = (email) => {
         const emailValidation = /^\S+@\S+\.\S+$/;
@@ -24,8 +27,18 @@ export function LoginPage() {
         return true;
     };
 
+    const suspendedAccounts = ["error@gmail.com"];
+
     const handleLogin = (e) => {
         e.preventDefault();
+
+        setAccountError("");
+
+        // Check if account is suspended
+        if (suspendedAccounts.includes(email)) {
+            toast.error("お使いのアカウントは現在アクセスできません。ログインするには担当の管理者までお問合せください。");
+            return;
+        }
 
         const isEmailValid = validateEmail(email);
 
@@ -38,13 +51,17 @@ export function LoginPage() {
             toast.error("メールアドレスまたはパスワードを入力してください！");
             return;
         }
+        setLoading(true);
 
-        // Dummy check for incorrect credentials
-        if (email !== "admin@gmail.com" || password !== "admin123") {
-            toast.error("メールアドレスまたはパスワードが正しくありません！");
-            return;
-        }
-        toast.success("ログイン成功！");
+        setTimeout(() => {
+            setLoading(false); // Reset loading state
+
+            if (email !== "admin@gmail.com" || password !== "admin123") {
+                toast.error("メールアドレスまたはパスワードが正しくありません！");
+            } else {
+                toast.success("ログイン成功！");
+            }
+        }, 2000);
     };
 
     return (
@@ -63,7 +80,7 @@ export function LoginPage() {
                     ログイン
                 </h1>
 
-                <form className="flex flex-col mt-11 w-full max-md:mt-10" onSubmit={handleLogin}>
+                <form className="flex flex-col mt-11 w-full max-md:mt-10" onSubmit={handleLogin} noValidate>
                     <div className="flex flex-col w-full text-xs font-medium text-stone-900">
                         <FormInput
                             label="メールアドレス"
@@ -73,13 +90,14 @@ export function LoginPage() {
                             onChange={(e) => {
                                 setEmail(e.target.value);
                                 validateEmail(e.target.value);
+                                setAccountError("");
                             }}
                             error={emailError}
                         />
-                         {emailError && (
+                        {emailError && (
                             <span className="text-red-500 text-xs mt-1">{emailError}</span>
                         )}
-                        
+
                         <div className="mt-6">
                             <FormInput
                                 label="パスワード"
@@ -92,7 +110,7 @@ export function LoginPage() {
                     </div>
 
                     <div className="flex flex-col mt-6 w-full text-sm leading-6 text-center">
-                        <LoginButton variant="primary">ログイン</LoginButton>
+                        <LoginButton variant="primary" loading={loading}>ログイン</LoginButton>
                         <div className="">
                             <LoginButton variant="secondary">
                                 <p className="font-semibold mt-2">パスワードをお忘れの場合</p>

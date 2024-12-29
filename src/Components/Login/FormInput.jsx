@@ -11,6 +11,7 @@ export function FormInput({ label, type = "text", id, value, onChange, error }) 
         id={id}
         value={value}
         onChange={onChange}
+        noValidate
         className={"flex mt-2 w-full bg-white rounded-lg outline-none px-2 focus:border-amber-500 border border-solid ${ error ? 'border-red-500'} : border-stone-300 } min-h-[44px]"}
         aria-label={label}
       />
