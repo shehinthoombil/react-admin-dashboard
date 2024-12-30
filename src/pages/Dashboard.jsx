@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { StatCard } from "../Components/Dashboard/StatCard";
 import { SidebarItem } from "../Components/Dashboard/SidebarItem";
+import { Loader } from "../Components/Loader";
 
 const sidebarItems = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/b770f451218dfee8638a8399199277aa3f841bab9f2517d0faef7ada457587df?placeholderIfAbsent=true&apiKey=28fe3b653a5f40f89b50637bb38c8709", label: "ダッシュボード", isActive: true },
@@ -49,22 +51,33 @@ const statsData = [
 ];
 
 function Dashboard() {
-    const [stats, setStats] = useState([]);
+  const navigate = useNavigate();
+  const [stats, setStats] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        // Fetch data from an API
-        const fetchStats = async () => {
-          try {
-            const response = await fetch('/api/dashboard-stats');
-            const data = await response.json();
-            setStats(data);
-          } catch (error) {
-            console.error("Error fetching stats:", error);
-          }
-        };
-        fetchStats();
-      }, []);
-      
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/dashboard-stats');
+        const data = await response.json();
+        setStats(data);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+  if (isLoading) return <Loader />;
+
   return (
     <div className="flex overflow-hidden flex-wrap bg-stone-100">
       <div className="flex flex-col text-sm leading-none whitespace-nowrap text-stone-500">
@@ -90,6 +103,8 @@ function Dashboard() {
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f643d27d3c0d5d2758e36638d8cef363a899feb8a57d744768c6730000aa0d7?placeholderIfAbsent=true&apiKey=28fe3b653a5f40f89b50637bb38c8709"
               alt="User profile"
               className="object-contain w-6 aspect-square"
+              onClick={handleLogout}
+              style={{ cursor: 'pointer' }}
             />
           </div>
         </div>
@@ -102,8 +117,6 @@ function Dashboard() {
             ))}
           </div>
         </div>
-        {/* Rest of the dashboard content remains unchanged as it contains unique elements */}
-        {/* Original JSX structure continues here */}
       </div>
     </div>
   );

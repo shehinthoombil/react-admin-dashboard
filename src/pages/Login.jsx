@@ -1,11 +1,13 @@
 import * as React from "react";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { FormInput } from "../Components/Login/FormInput";
 import { LoginButton } from "../Components/Login/LoginButton";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export function LoginPage() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -33,8 +35,6 @@ export function LoginPage() {
         e.preventDefault();
 
         setAccountError("");
-
-        // Check if account is suspended
         if (suspendedAccounts.includes(email)) {
             toast.error("お使いのアカウントは現在アクセスできません。ログインするには担当の管理者までお問合せください。");
             return;
@@ -45,8 +45,6 @@ export function LoginPage() {
         if (!isEmailValid) {
             return;
         }
-
-        // Validation Logic
         if (!password) {
             toast.error("メールアドレスまたはパスワードを入力してください！");
             return;
@@ -54,12 +52,19 @@ export function LoginPage() {
         setLoading(true);
 
         setTimeout(() => {
-            setLoading(false); // Reset loading state
+            setLoading(false);
 
             if (email !== "admin@gmail.com" || password !== "admin123") {
                 toast.error("メールアドレスまたはパスワードが正しくありません！");
             } else {
                 toast.success("ログイン成功！");
+              
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('user', JSON.stringify({ email }));
+               
+                setTimeout(() => {
+                    navigate('/dashboard');
+                }, 1000); 
             }
         }, 2000);
     };

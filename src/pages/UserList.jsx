@@ -28,7 +28,6 @@ function UserTable() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch user data from an API
         const fetchUsers = async () => {
             try {
                 const response = await fetch('/api/users');
