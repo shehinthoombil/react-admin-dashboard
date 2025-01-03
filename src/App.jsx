@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useNavigate, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import './index.css';
 import { LoginPage } from './pages/Login';
@@ -9,7 +9,34 @@ import LoginForm from './pages/SetNewPassword';
 import Blank from './pages/Blank';
 import { lazy, useState } from 'react';
 import { Gift, LayoutDashboard, LogOut, Menu, User, UsersRound, X } from 'lucide-react';
-import { SidebarItem } from './components/SidebarItem';
+
+const  SidebarItem= ({ icon, label, navigate_to })=> {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Determine if the current route matches the `navigate_to` route
+  const isActive = location.pathname === navigate_to;
+
+  return (
+    <div onClick={() => navigate(navigate_to)}
+      className={`flex  flex-col justify-center cursor-pointer py-4 px-28 pl-4 w-full ${
+        isActive
+          ? "font-bold text-amber-500 bg-orange-50 border-solid border-r-[3px] border-r-amber-500"
+          : "bg-white"
+      } max-w-[250px]`}
+    >
+      <div className="flex pl-2 gap-2.5 items-center w-full">
+        <div className="font-semibold">{icon}</div>
+        <div
+          
+          className="flex-1 shrink self-stretch my-auto basis-0 cursor-pointer"
+        >
+          {label}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const ProtectedRoute=()=> {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -121,7 +148,6 @@ const ProtectedRoute=()=> {
       </div>
   );
 }
-
 
 function App() {
   return (
