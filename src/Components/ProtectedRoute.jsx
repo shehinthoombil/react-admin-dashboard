@@ -4,7 +4,7 @@ import { SidebarItem } from "./SidebarItem";
 import { UsersRound, LayoutDashboard, Menu, X ,Gift ,User } from 'lucide-react';
 import { LogOut } from 'lucide-react';
 
-export default  ProtectedRoutev=()=> {
+const ProtectedRoute=()=> {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -114,3 +114,5 @@ export default  ProtectedRoutev=()=> {
         </div>
     );
 }
+
+export default ProtectedRoute;

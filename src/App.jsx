@@ -6,8 +6,8 @@ import { PasswordResetPage } from './pages/PasswordResetPage';
 import Dashboard from './pages/Dashboard';
 import UserTable from './pages/UserList';
 import LoginForm from './pages/SetNewPassword';
-import  ProtectedRoute  from './components/ProtectedRoute';
 import Blank from './pages/Blank';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
