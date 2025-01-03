@@ -7,7 +7,7 @@ import Dashboard from './pages/Dashboard';
 import UserTable from './pages/UserList';
 import LoginForm from './pages/SetNewPassword';
 import Blank from './pages/Blank';
-import ProtectedRoute from '../src/components/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
