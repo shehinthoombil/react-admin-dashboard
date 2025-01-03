@@ -1,10 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { FormInput } from "../Components/Login/FormInput";
-import { LoginButton } from "../Components/Login/LoginButton";
+import { FormInput } from "../components/Login/FormInput";
+import { LoginButton } from "../components/Login/LoginButton";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PasswordResetButton from "../components/Login/PasswordResetButton";
 
 export function LoginPage() {
     const navigate = useNavigate();
@@ -117,9 +118,9 @@ export function LoginPage() {
                     <div className="flex flex-col mt-6 w-full text-sm leading-6 text-center">
                         <LoginButton variant="primary" loading={loading}>ログイン</LoginButton>
                         <div className="">
-                            <LoginButton variant="secondary">
+                            <PasswordResetButton variant="secondary">
                                 <p className="font-semibold mt-2">パスワードをお忘れの場合</p>
-                            </LoginButton>
+                            </PasswordResetButton>
                         </div>
                     </div>
                 </form>

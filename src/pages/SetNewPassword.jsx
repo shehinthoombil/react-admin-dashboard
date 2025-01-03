@@ -1,7 +1,7 @@
 import * as React from "react";
-import { FormInput } from "../Components/setNewPassword/FormInput";
-import { NotificationBanner } from "../Components/setNewPassword/NotificationBanner";
-import { Button } from "../Components/passswordReset/Button";
+import { FormInput } from "../components/setNewPassword/FormInput";
+import { NotificationBanner } from "../components/setNewPassword/NotificationBanner";
+import { Button } from "../components/passswordReset/Button";
 
 function LoginForm() {
   const formFields = [

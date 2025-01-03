@@ -1,6 +1,6 @@
 import * as React from "react";
-import { PasswordResetForm } from "../Components/passswordReset/PasswordResetForm.jsx";
-import { Logo } from "../Components/passswordReset/Logo.jsx";
+import { PasswordResetForm } from "../components/passswordReset/PasswordResetForm.jsx.jsx";
+import { Logo } from "../components/passswordReset/Logo.jsx";
 
 export function PasswordResetPage() {
   return (
@@ -8,7 +8,7 @@ export function PasswordResetPage() {
       <Logo />
       <div className="flex flex-col self-center mt-44 max-w-full w-[400px] max-md:mt-10">
         <div className="flex flex-col items-start w-full text-center">
-          <div className="text-3xl font-medium leading-none text-stone-900">
+          <div className="text-3xl font-medium leading-none text-center text-stone-900">
             パスワード再設定
           </div>
           <div className="mt-6 text-sm tracking-normal text-stone-500">

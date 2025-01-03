@@ -1,103 +1,155 @@
 import React, { useState, useEffect } from "react";
-import { TableRow } from "../Components/userList/TableRow";
-import { SidebarItem } from "../Components/userList/SidebarItem";
-import { TableHeader } from "../Components/userList/TableHeader";
-import { Pagination } from "../Components/userList/Pagination";
+import { TableRow } from "../components/userList/TableRow";
+import { SidebarItem } from "../components/userList/SidebarItem";
+import { TableHeader } from "../components/userList/TableHeader";
+import { Pagination } from "../components/userList/Pagination";
 
-const userData = [
-    {
-        id: "01",
-        nickname: "ゆうと",
-        email: "example1@example.com",
-        birthDate: "1992年 12月",
-        gender: "男性",
-        location: "東京都",
-        registrationDate: "2024年 01月 12日"
-    }
+// Initial user data matching the image
+const initialUserData = [
+    { id: "01", nickname: "ゆうと", email: "example1@example.com", birthDate: "1992年 12月", gender: "男性", location: "東京都", registrationDate: "2024年 01月 12日" },
+    { id: "02", nickname: "ニックネーム最大12文字", email: "user234@example.net", birthDate: "1987年 5月", gender: "女性", location: "東京都", registrationDate: "2024年 01月 12日" },
+    { id: "03", nickname: "わんこ好き", email: "test_user@gmail.com", birthDate: "1996年 10月", gender: "男性", location: "東京都", registrationDate: "2024年 01月 12日" },
+    { id: "04", nickname: "はるかぜ", email: "dummy_email_567@yahoo.co.jp", birthDate: "1998年 2月", gender: "男性", location: "静岡県", registrationDate: "2024年 01月 12日" },
+    { id: "05", nickname: "あおい", email: "ecampleaddrss124623@outlook.com", birthDate: "1978年 5月", gender: "女性", location: "埼玉県", registrationDate: "2024年 01月 11日" },
+    { id: "06", nickname: "ポンたろう", email: "random.user@example.org", birthDate: "1978年 6月", gender: "女性", location: "栃木県", registrationDate: "2024年 01月 11日" },
+    { id: "07", nickname: "まさやん", email: "email1234@example.co.jp", birthDate: "1972年 8月", gender: "回答しない", location: "鹿児島県", registrationDate: "2024年 01月 11日" },
+    { id: "08", nickname: "なつこ", email: "user_test456@gmail.com", birthDate: "1969年 11月", gender: "回答しない", location: "茨城県", registrationDate: "2024年 01月 11日" },
+    { id: "09", nickname: "ぴょんぴょん", email: "example_email@yahoo.com", birthDate: "1984年 4月", gender: "女性", location: "東京都", registrationDate: "2024年 01月 10日" },
+    { id: "10", nickname: "ひまわりさん", email: "dummy.address@example.net", birthDate: "1988年 4月", gender: "その他", location: "福岡", registrationDate: "2024年 01月 10日" }
 ];
 
 const sidebarItems = [
-    { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/131712ca00a3b63cf3803ee93f3e4d2157164e90c8e800595cbce9931c479ca4?placeholderIfAbsent=true&apiKey=28fe3b653a5f40f89b50637bb38c8709", text: "ダッシュボード", isActive: false },
-    { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/8266f0e1ae0e5edf20458d2a148acf9cdc4b5cf937e22230cdc5313287df6bcb?placeholderIfAbsent=true&apiKey=28fe3b653a5f40f89b50637bb38c8709", text: "登録ユーザー", isActive: true },
-    { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/bd67b3d0339b11230eb53aa620b9372214347c0a67e42355c86a5a1d2ecd8580?placeholderIfAbsent=true&apiKey=28fe3b653a5f40f89b50637bb38c8709", text: "当選者", isActive: false },
-    { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/43cdfc0bfce7ab13efe550cd28b6cbc356f4758b7073ea8e88a5590760bd39d3?placeholderIfAbsent=true&apiKey=28fe3b653a5f40f89b50637bb38c8709", text: "運営管理者", isActive: false }
+    { text: "ダッシュボード", isActive: false },
+    { text: "登録ユーザー", isActive: true },
+    { text: "当選者", isActive: false },
+    { text: "運営管理者", isActive: false }
 ];
 
 function UserTable() {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [users, setUsers] = useState(initialUserData);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedUsers, setSelectedUsers] = useState(new Set());
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const totalItems = 5000;
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch('/api/users');
-                const data = await response.json();
-                setUsers(data);
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            } finally {
-                setLoading(false);
+    const handleSearch = (e) => {
+        const term = e.target.value;
+        setSearchTerm(term);
+        if (term) {
+            const filtered = initialUserData.filter(user =>
+                user.nickname.toLowerCase().includes(term.toLowerCase()) ||
+                user.email.toLowerCase().includes(term.toLowerCase())
+            );
+            setUsers(filtered);
+        } else {
+            setUsers(initialUserData);
+        }
+    };
+
+    const handleToggleUser = (userId) => {
+        setSelectedUsers(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(userId)) {
+                newSet.delete(userId);
+            } else {
+                newSet.add(userId);
             }
-        };
-        fetchUsers();
-    }, []);
+            return newSet;
+        });
+    };
+
     return (
-        <div className="flex overflow-hidden flex-wrap bg-stone-100">
-            <div className="flex flex-col text-sm leading-none whitespace-nowrap text-stone-500">
-                <div className="flex flex-col pt-5 bg-white border-r border-solid border-r-stone-100 pb-[645px] max-md:pb-24">
-                    <img
-                        loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/37cbc438fac0a1ce7175d11e03a979299ff2682c0d4304a8140776b7319c637a?placeholderIfAbsent=true&apiKey=28fe3b653a5f40f89b50637bb38c8709"
-                        alt="Company Logo"
-                        className="object-contain ml-4 max-w-full aspect-[6.49] w-[130px] max-md:ml-2.5"
-                    />
-                    <div className="flex flex-col mt-8 mb-0 max-md:mb-2.5">
-                        {sidebarItems.map((item, index) => (
-                            <SidebarItem key={index} {...item} />
-                        ))}
-                    </div>
-                </div>
-            </div>
-            <div className="flex flex-col grow shrink-0 items-center self-start basis-0 w-fit max-md:max-w-full">
-                <div className="flex flex-col justify-center items-end self-stretch px-16 py-1.5 w-full bg-white border-b border-solid border-b-stone-100 max-md:pl-5 max-md:max-w-full">
-                    <div className="flex gap-2 items-start px-3 py-2.5">
-                        <img
-                            loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f643d27d3c0d5d2758e36638d8cef363a899feb8a57d744768c6730000aa0d7?placeholderIfAbsent=true&apiKey=28fe3b653a5f40f89b50637bb38c8709"
-                            alt="User Profile"
-                            className="object-contain w-6 aspect-square"
-                        />
-                    </div>
-                </div>
-                <div className="flex flex-wrap gap-5 justify-between mt-10 w-full tracking-tight max-w-[1136px] max-md:max-w-full">
-                    <div className="my-auto text-xl font-medium leading-none text-stone-900">
-                        登録ユーザー一覧
-                    </div>
-                    <div className="flex flex-col justify-center items-start px-2 py-2.5 text-base leading-none text-center bg-white rounded-lg border border-solid border-stone-300 text-stone-400 max-md:pr-5">
-                        <div className="flex gap-2 items-center min-h-[21px]">
-                            <img
-                                loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/92bae9ffe4ea1cf23c3702da405a2ed00843569dca36aa97ee64b4237156c2bb?placeholderIfAbsent=true&apiKey=28fe3b653a5f40f89b50637bb38c8709"
-                                alt="Search Icon"
-                                className="object-contain shrink-0 self-stretch my-auto w-5 aspect-square"
-                            />
-                            <label htmlFor="searchInput" className="sr-only">ニックネーム / メールアドレスで検索</label>
+        <div className="h-screen ">
+
+            {/* Main Content */}
+            <div className="max-xl:w-screen">
+
+                {/* Content */}
+                <div className="p-4 md:p-8">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 md:gap-0">
+                        <h1 className="text-xl font-medium text-stone-900">登録ユーザー一覧</h1>
+                        <div className="relative w-full md:w-80">
                             <input
-                                id="searchInput"
                                 type="text"
-                                placeholder="ニックネーム / メールアドレスで検索"
-                                className="self-stretch my-auto bg-transparent border-none outline-none"
+                                placeholder="ニックネーム/メールアドレスで検索"
+                                value={searchTerm}
+                                onChange={handleSearch}
+                                className="w-full h-10 px-4 pl-10 rounded-lg border border-stone-300 focus:outline-none focus:border-stone-400"
                             />
+                            <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {/* Table Container with Horizontal Scroll */}
+                    <div className="bg-white rounded-lg overflow-x-scroll">
+                        <div className="overflow-x-auto">
+                            <div className="min-w-[900px]"> {/* Minimum width to prevent squishing */}
+                                <table className="w-full">
+                                    <thead className="bg-stone-50 text-sm text-stone-500">
+                                        <tr>
+                                            <th className="py-3 px-4 text-left whitespace-nowrap">No.</th>
+                                            <th className="py-3 px-4 text-left whitespace-nowrap">ニックネーム</th>
+                                            <th className="py-3 px-4 text-left whitespace-nowrap">メールアドレス</th>
+                                            <th className="py-3 px-4 text-left whitespace-nowrap">生年月</th>
+                                            <th className="py-3 px-4 text-left whitespace-nowrap">性別</th>
+                                            <th className="py-3 px-4 text-left whitespace-nowrap">居住地</th>
+                                            <th className="py-3 px-4 text-left whitespace-nowrap">登録日</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {users.map((user) => (
+                                            <tr
+                                                key={user.id}
+                                                className={`border-t border-stone-200 text-sm hover:bg-stone-50 ${selectedUsers.has(user.id) ? 'bg-stone-50' : ''
+                                                    }`}
+                                                onClick={() => handleToggleUser(user.id)}
+                                            >
+                                                <td className="py-4 px-4 whitespace-nowrap">{user.id}</td>
+                                                <td className="py-4 px-4 whitespace-nowrap cursor-pointer" >{user.nickname}</td>
+                                                <td className="py-4 px-4 whitespace-nowrap cursor-pointer group relative">
+                                                    {user.email}
+                                                    <div className="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded px-2 py-1 left-1/2 transform -translate-x-1/2 top-full mt-1">
+                                                        {user.email}
+                                                    </div>
+                                                </td>
+                                                {/* <td  className="py-4 cursor-pointer px-4 whitespace-nowrap" >{user.email}</td> */}
+                                                <td className="py-4 px-4 whitespace-nowrap">{user.birthDate}</td>
+                                                <td className="py-4 px-4 whitespace-nowrap">{user.gender}</td>
+                                                <td className="py-4 px-4 whitespace-nowrap">{user.location}</td>
+                                                <td className="py-4 px-4 whitespace-nowrap">{user.registrationDate}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Pagination */}
+                    <div className="mt-4 flex flex-col md:flex-row justify-between items-center text-sm text-stone-500 gap-4 md:gap-0">
+                        <div>5,000人中 - 10人表示</div>
+                        <div className="flex gap-2">
+                            <button className="px-2 py-1">&lt;</button>
+                            {[1, 2, 3, 4, 5].map(page => (
+                                <button
+                                    key={page}
+                                    className={`px-2 py-1 rounded ${currentPage === page ? 'bg-amber-500 text-white' : ''
+                                        }`}
+                                    onClick={() => setCurrentPage(page)}
+                                >
+                                    {page}
+                                </button>
+                            ))}
+                            <span>...</span>
+                            <button className="px-2 py-1">500</button>
+                            <button className="px-2 py-1">&gt;</button>
                         </div>
                     </div>
                 </div>
-                <div className="flex overflow-hidden flex-wrap items-start self-stretch mx-10 mt-4 rounded-lg max-md:mr-2.5">
-                    <TableHeader />
-                    {userData.map((user) => (
-                        <TableRow key={user.id} {...user} />
-                    ))}
-                </div>
-                <Pagination totalItems={5000} currentPage={1} itemsPerPage={10} />
+                <div className="h-[60px] w-full"></div>
             </div>
         </div>
     );
