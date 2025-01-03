@@ -8,7 +8,7 @@ import UserTable from './pages/UserList';
 import LoginForm from './pages/SetNewPassword';
 import Blank from './pages/Blank';
 import { lazy } from 'react';
-const ProtectedRoute = lazy(() => import('./components/ProtectedRoute'));
+const ProtectedRoute = lazy(() => import('@/components/ProtectedRoute'));
 
 function App() {
   return (
