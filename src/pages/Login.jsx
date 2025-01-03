@@ -71,7 +71,7 @@ export function LoginPage() {
     };
 
     return (
-        <div className="flex overflow-hidden flex-col pb-80 bg-stone-100 max-md:pb-24">
+        <div className="flex overflow-hidden min-h-screen flex-col pb-80 bg-stone-100 max-md:pb-24">
             <header className="flex flex-col justify-center items-start py-6 pr-2 pl-9 w-full border-b border-solid bg-stone-100 border-b-stone-300 min-h-[76px] max-md:pl-5 max-md:max-w-full">
                 <img
                     loading="lazy"
@@ -81,7 +81,7 @@ export function LoginPage() {
                 />
             </header>
 
-            <main className="flex flex-col self-center  mt-32 max-w-full whitespace-nowrap w-[400px] max-md:mt-10">
+            <main className="flex flex-col  self-center  mt-32 max-w-full whitespace-nowrap px-6 w-full sm:w-[400px] max-md:mt-10">
                 <h1 className="self-start text-3xl mx-auto font-semibold leading-none text-center text-stone-900">
                     ログイン
                 </h1>
